@@ -1,0 +1,26 @@
+<div class="shell">
+  <header class="topbar">
+    <a routerLink="/" class="brand">
+      <span class="brand-mark">⏳</span>
+      <span class="brand-name">{{ t.appName }}</span>
+    </a>
+  </header>
+
+  <main class="main">
+    <router-outlet />
+  </main>
+
+  <footer class="footer">
+    <p>
+      {{ t.footerLicense }}
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.it" target="_blank" rel="noopener">
+        CC BY-SA 4.0</a
+      >. {{ t.footerDisclaimer }}
+    </p>
+    <nav>
+      <a routerLink="/privacy">{{ t.footerPrivacy }}</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://ko-fi.com/" target="_blank" rel="noopener">{{ t.footerSupport }} ♥</a>
+    </nav>
+  </footer>
+</div>

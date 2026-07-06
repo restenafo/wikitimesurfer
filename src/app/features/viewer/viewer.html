@@ -1,0 +1,158 @@
+<div class="viewer">
+  <header class="viewer-head">
+    <a routerLink="/" class="back">← {{ t.newSearch }}</a>
+    <h1>{{ normalizedTitle() }}</h1>
+    <a [href]="articleUrl()" target="_blank" rel="noopener" class="ext">
+      {{ t.viewOnWikipedia }} ↗
+    </a>
+  </header>
+
+  @if (historyError(); as err) {
+    <div class="error-box">
+      <p>{{ err }}</p>
+      <button (click)="retry()">Riprova</button>
+    </div>
+  } @else {
+    @if (historyLoading()) {
+      <div class="progress" role="status">
+        <span>
+          {{ t.loadingHistory }} {{ fmt(revisions().length) }}
+          @if (totalCount(); as tot) {
+            / {{ fmt(tot) }}
+          }
+          {{ t.loadedRevisions }}
+        </span>
+        @if (progressPct(); as pct) {
+          <span class="progress-track"><span class="progress-bar" [style.width.%]="pct"></span></span>
+        }
+      </div>
+    }
+
+    @if (userFilter(); as f) {
+      <div class="filter-banner">
+        <span>
+          {{ t.filterActive }} <strong>{{ f }}</strong>
+          <span class="filter-count">({{ fmt(seq().length) }} {{ t.filterEdits }})</span>
+        </span>
+        <button class="filter-clear" (click)="clearFilter()">✕ {{ t.filterClear }}</button>
+      </div>
+    }
+
+    <app-timeline
+      [revisions]="revisions()"
+      [currentIndex]="currentIndex()"
+      [filterUser]="userFilter()"
+      (jumpTo)="onTimelineJump($event)"
+    />
+
+    <nav class="navbar" [attr.aria-label]="t.scrubber">
+      <button
+        class="nav-btn"
+        (click)="goFirst()"
+        [disabled]="historyLoading() || !canPrev()"
+        [title]="t.firstVersion + ' (Home)'"
+      >
+        ⇤
+      </button>
+      <button class="nav-btn" (click)="step(-1)" [disabled]="!canPrev()" [title]="t.prevVersion + ' (←)'">
+        ←
+      </button>
+      <input
+        type="range"
+        class="scrubber"
+        min="0"
+        [max]="seq().length - 1"
+        [value]="posInSeq()"
+        (input)="onScrub($event)"
+        [attr.aria-label]="t.scrubber"
+      />
+      <button class="nav-btn" (click)="step(1)" [disabled]="!canNext()" [title]="t.nextVersion + ' (→)'">
+        →
+      </button>
+      <button class="nav-btn" (click)="goLast()" [disabled]="!canNext()" [title]="t.lastVersion + ' (End)'">
+        ⇥
+      </button>
+    </nav>
+    <p class="kbd-hint">{{ t.kbdHint }}</p>
+
+    @if (current(); as rev) {
+      <section class="rev-card">
+        <div class="rev-head">
+          <span class="rev-pos">
+            {{ t.version }} {{ fmt(currentIndex() + 1) }} {{ t.of }} {{ fmt(revisions().length) }}
+          </span>
+          <span class="rev-date">{{ formatDate(rev.timestamp) }}</span>
+          @if (rev.minor) {
+            <span class="badge">{{ t.minorEdit }}</span>
+          }
+          @if (rev.delta != null && rev.delta !== 0) {
+            <span class="delta" [class.pos]="rev.delta > 0" [class.neg]="rev.delta < 0">
+              {{ deltaLabel(rev) }}
+            </span>
+          }
+          <a class="rev-ext" [href]="revisionUrl(rev.revid)" target="_blank" rel="noopener">
+            {{ t.thisVersionOnWiki }} ↗
+          </a>
+        </div>
+        <div class="rev-user">
+          @if (rev.userHidden) {
+            <em>{{ t.userHidden }}</em>
+          } @else {
+            <button class="user-btn" (click)="selectUser(rev.user)" [title]="t.filterByUser">
+              {{ rev.user }}
+            </button>
+            <a
+              class="user-ext"
+              [href]="userUrl(rev.user)"
+              target="_blank"
+              rel="noopener"
+              [title]="t.userContribs"
+            >↗</a>
+          }
+          @if (rev.commentHidden) {
+            <em class="rev-comment">({{ t.commentHidden }})</em>
+          } @else if (rev.comment) {
+            <span class="rev-comment">«{{ rev.comment }}»</span>
+          }
+        </div>
+      </section>
+
+      <div class="diff-legend">
+        <span class="chip ins">{{ t.legendAdded }}</span>
+        <span class="chip del">{{ t.legendRemoved }}</span>
+        @if (currentIndex() === 0 && !historyLoading()) {
+          <span class="first-note">{{ t.firstVersionNote }}</span>
+        }
+      </div>
+    }
+
+    <section class="article-wrap">
+      @if (diffLoading()) {
+        <div class="article-loading" role="status">
+          <span class="spinner"></span> {{ t.diffLoading }}
+        </div>
+      }
+      @if (diffError(); as derr) {
+        <div class="error-box"><p>{{ derr }}</p></div>
+      }
+      @if (diffHtml(); as html) {
+        <article
+          class="wts-article"
+          [class.dimmed]="diffLoading()"
+          [innerHTML]="html"
+          (click)="onArticleClick($event)"
+        ></article>
+      }
+    </section>
+
+    <p class="attribution">
+      {{ t.attributionPre }}
+      <a [href]="articleUrl()" target="_blank" rel="noopener">Wikipedia</a>
+      (<a [href]="historyUrl()" target="_blank" rel="noopener">cronologia e autori</a>),
+      {{ t.attributionLicense }}
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.it" target="_blank" rel="noopener">
+        CC BY-SA 4.0</a
+      >.
+    </p>
+  }
+</div>

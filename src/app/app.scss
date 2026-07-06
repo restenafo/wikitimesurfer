@@ -1,0 +1,47 @@
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--grid);
+  padding: 0.55rem 1.25rem;
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    text-decoration: none;
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 1.05rem;
+
+    .brand-mark {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+.main {
+  flex: 1;
+}
+
+.footer {
+  border-top: 1px solid var(--grid);
+  padding: 1rem 1.25rem 1.4rem;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  text-align: center;
+
+  p {
+    margin: 0 0 0.4rem;
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+}

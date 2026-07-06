@@ -1,0 +1,181 @@
+/* ===== WikiTimeSurfer — global styles ===== */
+
+:root {
+  /* chrome & ink */
+  --surface: #fcfcfb;
+  --page: #f9f9f7;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --ink-muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+
+  /* series / accent */
+  --accent: #2a78d6;
+  --accent-deep: #1c5cab;
+  --accent-soft: #86b6ef;
+  --accent-wash: #eaf2fc;
+
+  /* diff colors */
+  --ins-bg: #d6f3d6;
+  --ins-ink: #0a5c0a;
+  --del-bg: #fbdede;
+  --del-ink: #8c1d1d;
+
+  /* deltas */
+  --good: #006300;
+  --bad: #c22f2f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--page);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--accent-deep);
+}
+
+button {
+  font: inherit;
+}
+
+/* =========================================================
+   Article content (injected via [innerHTML] → must be global,
+   component style encapsulation does not reach it)
+   ========================================================= */
+
+.wts-article {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  overflow-wrap: break-word;
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: 1.25;
+    margin: 1.2em 0 0.4em;
+    font-weight: 600;
+  }
+
+  h2 {
+    border-bottom: 1px solid var(--grid);
+    padding-bottom: 0.2em;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  table {
+    border-collapse: collapse;
+    max-width: 100%;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.6em;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--grid);
+    margin-left: 0;
+    padding-left: 1em;
+    color: var(--ink-2);
+  }
+
+  /* fallback minimi se gli stili di Wikipedia non coprono */
+  .infobox,
+  .sinottico {
+    float: right;
+    clear: right;
+    margin: 0 0 1rem 1.25rem;
+    max-width: 22rem;
+    font-size: 0.85em;
+  }
+
+  .thumb.tright,
+  figure[typeof~='mw:File/Thumb'] {
+    float: right;
+    clear: right;
+    margin: 0.3rem 0 1rem 1.25rem;
+  }
+
+  .thumb.tleft {
+    float: left;
+    clear: left;
+    margin: 0.3rem 1.25rem 1rem 0;
+  }
+
+  figcaption {
+    font-size: 0.85em;
+    color: var(--ink-2);
+  }
+
+  /* ---- evidenziazione differenze ---- */
+  ins,
+  ins a,
+  ins b,
+  ins i,
+  ins span,
+  ins li,
+  ins td,
+  ins th,
+  ins p,
+  ins div {
+    background-color: var(--ins-bg);
+    text-decoration: none;
+  }
+
+  ins {
+    box-shadow: 0 0 0 2px var(--ins-bg);
+    border-radius: 2px;
+  }
+
+  del,
+  del a,
+  del b,
+  del i,
+  del span,
+  del li,
+  del td,
+  del th,
+  del p,
+  del div {
+    background-color: var(--del-bg);
+    color: var(--del-ink);
+  }
+
+  del {
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+    box-shadow: 0 0 0 2px var(--del-bg);
+    border-radius: 2px;
+  }
+
+  ins img {
+    outline: 3px solid var(--ins-ink);
+    outline-offset: 1px;
+  }
+
+  del img {
+    outline: 3px solid var(--del-ink);
+    outline-offset: 1px;
+    opacity: 0.55;
+  }
+}

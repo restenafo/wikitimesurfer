@@ -1,0 +1,102 @@
+<div class="timeline" #wrapper>
+  <div class="tl-head">
+    <span class="tl-title">{{ t.timelineTitle }}</span>
+    <span class="tl-total">{{ fmt(revisions().length) }} {{ t.timelineEdits }}</span>
+    @if (filterUser(); as f) {
+      <span class="tl-legend">
+        <span class="swatch main"></span>{{ t.legendUser }} {{ f }}
+        <span class="swatch other"></span>{{ t.legendOthers }}
+      </span>
+    }
+  </div>
+
+  <div class="tl-body">
+    <div class="tl-yaxis" [style.height.px]="HEIGHT">
+      <span [style.top.px]="TOP - 7">{{ fmt(niceMax()) }}</span>
+      @if (midLabel(); as ml) {
+        <span [style.top.px]="TOP + PLOT_H / 2 - 7">{{ ml }}</span>
+      }
+      <span [style.top.px]="TOP + PLOT_H - 7">0</span>
+    </div>
+
+    <div class="tl-scroll" #scroller>
+      <svg
+        [attr.width]="width()"
+        [attr.height]="HEIGHT"
+        class="tl-svg"
+        role="img"
+        [attr.aria-label]="ariaLabel()"
+      >
+        <line [attr.x2]="width()" [attr.y1]="TOP" [attr.y2]="TOP" x1="0" class="grid" />
+        <line
+          [attr.x2]="width()"
+          [attr.y1]="TOP + PLOT_H / 2"
+          [attr.y2]="TOP + PLOT_H / 2"
+          x1="0"
+          class="grid"
+        />
+        <line
+          [attr.x2]="width()"
+          [attr.y1]="TOP + PLOT_H"
+          [attr.y2]="TOP + PLOT_H"
+          x1="0"
+          class="baseline"
+        />
+
+        @for (bar of bars(); track bar.bucket.x) {
+          @for (seg of bar.segments; track seg.cls) {
+            <path
+              [attr.d]="seg.path"
+              class="bar"
+              [class.other]="seg.cls === 'other'"
+              [class.lift]="hover()?.b === bar.bucket"
+            />
+          }
+        }
+
+        @for (tick of yearTicks(); track tick.x) {
+          <text [attr.x]="tick.x" [attr.y]="HEIGHT - 6" class="xlabel">{{ tick.year }}</text>
+        }
+
+        @if (markerX(); as mx) {
+          <line [attr.x1]="mx" [attr.x2]="mx" [attr.y1]="TOP - 8" [attr.y2]="TOP + PLOT_H" class="marker" />
+          <path [attr.d]="'M' + (mx - 4) + ',' + (TOP - 12) + ' h8 l-4,6 z'" class="marker-head" />
+        }
+
+        @for (bar of bars(); track bar.bucket.x) {
+          <rect
+            [attr.x]="bar.bucket.x - 1"
+            y="0"
+            [attr.width]="PITCH"
+            [attr.height]="TOP + PLOT_H"
+            class="hit"
+            [class.clickable]="bar.bucket.firstIndex >= 0"
+            (pointerenter)="onHover(bar.bucket, $event)"
+            (pointermove)="onHover(bar.bucket, $event)"
+            (pointerleave)="hover.set(null)"
+            (click)="onClick(bar.bucket)"
+          />
+        }
+      </svg>
+    </div>
+  </div>
+
+  @if (hover(); as hv) {
+    <div class="tl-tooltip" [style.left.px]="hv.x" [style.top.px]="hv.y">
+      <div class="tt-value">
+        {{ fmt(hv.b.count) }} {{ hv.b.count === 1 ? t.timelineEditsOne : t.timelineEdits }}
+      </div>
+      <div class="tt-label">{{ hv.b.label }}</div>
+      @if (filterUser(); as f) {
+        <div class="tt-row">
+          <span class="key main"></span><strong>{{ fmt(hv.b.userCount) }}</strong>
+          <span class="tt-who">{{ f }}</span>
+        </div>
+        <div class="tt-row">
+          <span class="key other"></span><strong>{{ fmt(hv.b.count - hv.b.userCount) }}</strong>
+          <span class="tt-who">{{ t.legendOthers }}</span>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,174 @@
+:host {
+  display: block;
+}
+
+.timeline {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px 4px;
+}
+
+.tl-head {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.tl-title {
+  font-weight: 600;
+}
+
+.tl-total {
+  color: var(--ink-muted);
+}
+
+.tl-legend {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+
+  &.main {
+    background: var(--accent);
+  }
+
+  &.other {
+    background: var(--accent-soft);
+    margin-left: 10px;
+  }
+}
+
+.tl-body {
+  display: flex;
+}
+
+.tl-yaxis {
+  position: relative;
+  width: 36px;
+  flex: none;
+  font-size: 10px;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+
+  span {
+    position: absolute;
+    right: 8px;
+  }
+}
+
+.tl-scroll {
+  overflow-x: auto;
+  flex: 1;
+}
+
+.tl-svg {
+  display: block;
+}
+
+.grid {
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+
+.baseline {
+  stroke: var(--axis);
+  stroke-width: 1;
+}
+
+.bar {
+  fill: var(--accent);
+
+  &.other {
+    fill: var(--accent-soft);
+  }
+
+  &.lift {
+    fill-opacity: 0.75;
+  }
+}
+
+.xlabel {
+  fill: var(--ink-muted);
+  font-size: 10px;
+}
+
+.marker {
+  stroke: var(--ink-2);
+  stroke-width: 1;
+}
+
+.marker-head {
+  fill: var(--ink-2);
+}
+
+.hit {
+  fill: transparent;
+
+  &.clickable {
+    cursor: pointer;
+  }
+}
+
+.tl-tooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 12px));
+  background: var(--ink);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 5;
+
+  .tt-value {
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+
+  .tt-label {
+    color: #c3c2b7;
+  }
+
+  .tt-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 2px;
+  }
+
+  .tt-who {
+    color: #c3c2b7;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .key {
+    width: 10px;
+    height: 3px;
+    border-radius: 2px;
+    flex: none;
+
+    &.main {
+      background: var(--accent);
+    }
+
+    &.other {
+      background: var(--accent-soft);
+    }
+  }
+}

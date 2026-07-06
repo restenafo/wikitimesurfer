@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm *)",
+      "PowerShell(npx -y @angular/cli@latest new wikitimesurfer --directory . --style scss --ssr false --zoneless false --defaults --skip-git 2>&1 | Select-Object -Last 25)",
+      "PowerShell(npm install)",
+      "Skill(dataviz)",
+      "PowerShell(node \"C:\\\\Users\\\\Stefano\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\bundled-skills\\\\2.1.201\\\\3c11fd34874bcf489de81d3bedd58806\\\\dataviz\\\\scripts\\\\validate_palette.js\" \"#2a78d6,#b7d3f6\" --mode light --surface \"#fcfcfb\" 2>&1 | Select-Object -Last 20)",
+      "PowerShell(node \"C:\\\\Users\\\\Stefano\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\bundled-skills\\\\2.1.201\\\\3c11fd34874bcf489de81d3bedd58806\\\\dataviz\\\\scripts\\\\validate_palette.js\" \"#86b6ef,#2a78d6\" --mode light --surface \"#fcfcfb\" --ordinal 2>&1 | Select-Object -Last 10)",
+      "PowerShell(npx ng build 2>&1 | Select-Object -Last 30)",
+      "PowerShell(node \"C:\\\\Users\\\\Stefano\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Stefano-Sviluppo-wikipedia-surfer\\\\387b2124-2274-47bc-be64-a649e292ad47\\\\scratchpad\\\\pipeline-test.mjs\")",
+      "PowerShell(npx ng build 2>&1 | Select-Object -Last 12)",
+      "PowerShell(npx ng serve --port 4200 2>&1 | Select-Object -First 15)",
+      "PowerShell(npx ng serve --port 4377 2>&1 | Select-Object -First 15)",
+      "PowerShell(npx ng test --include \"**/app.spec.ts\" --include \"**/timeline.spec.ts\" 2>&1 | Select-Object -Last 5; \"---- app+viewer ----\"; npx ng test --include \"**/app.spec.ts\" --include \"**/viewer.spec.ts\" 2>&1 | Select-Object -Last 5)",
+      "PowerShell(npx ng test --help 2>&1 | Out-String -Width 160)",
+      "PowerShell(npx ng test --isolate 2>&1 | Select-Object -Last 6)",
+      "PowerShell(Rename-Item *)",
+      "PowerShell(Remove-Item *)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri http://localhost:4377 -UseBasicParsing -TimeoutSec 3; \"HTTP $\\($r.StatusCode\\) — dev server attivo su http://localhost:4377\" } catch { \"dev server non attivo\" })",
+      "PowerShell(npx ng serve --port 4377 2>&1 | Select-Object -First 10)",
+      "PowerShell($ok=$false; for\\($i=0;$i -lt 40;$i++\\){ try { $r=Invoke-WebRequest -Uri http://localhost:4377 -UseBasicParsing -TimeoutSec 2; if\\($r.StatusCode -eq 200\\){$ok=$true;break} } catch { Start-Sleep -Milliseconds 700 } }; if\\($ok\\){\"attivo: http://localhost:4377\"}else{\"non raggiungibile\"})",
+      "PowerShell(npx ng serve --port 4377)",
+      "PowerShell(git *)"
+    ]
+  }
+}

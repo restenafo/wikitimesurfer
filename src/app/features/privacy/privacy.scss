@@ -1,0 +1,29 @@
+.privacy {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  h2 {
+    font-size: 1.05rem;
+    margin-top: 1.8rem;
+  }
+
+  .updated {
+    color: var(--ink-muted);
+    font-size: 0.8rem;
+  }
+
+  code {
+    background: var(--page);
+    border: 1px solid var(--grid);
+    border-radius: 4px;
+    padding: 0 0.3em;
+    font-size: 0.85em;
+  }
+}
