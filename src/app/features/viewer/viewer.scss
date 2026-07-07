@@ -398,3 +398,32 @@
   color: var(--ink-muted);
   margin-top: 0.8rem;
 }
+
+@media (max-width: 480px) {
+  .viewer {
+    padding: 0.75rem 0.75rem 3rem;
+  }
+
+  .viewer-head h1 {
+    font-size: 1.2rem;
+  }
+
+  .navbar {
+    gap: 0.25rem;
+    padding: 0.35rem 0.45rem;
+  }
+
+  .nav-btn {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .article-wrap {
+    padding: 1rem 0.9rem;
+  }
+
+  .float-stack {
+    right: 0.6rem;
+    bottom: 0.9rem;
+  }
+}

@@ -150,3 +150,47 @@
     margin-bottom: 0.35rem;
   }
 }
+
+@media (max-width: 560px) {
+  .home {
+    padding: 1.25rem 1rem 3rem;
+  }
+
+  .hero {
+    margin-bottom: 1.25rem;
+
+    h1 {
+      font-size: 1.9rem;
+    }
+
+    .tagline {
+      font-size: 1rem;
+    }
+  }
+
+  .search-card {
+    padding: 1rem;
+  }
+
+  .lang-label {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.3rem;
+
+    select {
+      width: 100%;
+    }
+  }
+
+  .search-row {
+    flex-direction: column;
+
+    .go {
+      padding: 0.6rem;
+    }
+  }
+
+  .how {
+    margin-top: 1.75rem;
+  }
+}

@@ -247,6 +247,28 @@ button {
   }
 }
 
+/* Su schermi stretti le infobox e i thumbnail flottanti di Wikipedia
+   schiaccerebbero il testo: vanno a piena larghezza (come Wikipedia mobile).
+   !important per vincere sugli stili inline e su site.styles. */
+@media (max-width: 720px) {
+  .wts-article {
+    .infobox,
+    .sinottico {
+      float: none !important;
+      width: auto !important;
+      max-width: 100% !important;
+      margin: 0 0 1rem !important;
+    }
+
+    .thumb.tright,
+    .thumb.tleft,
+    figure[typeof~='mw:File/Thumb'] {
+      float: none !important;
+      margin: 0.5rem auto 1rem !important;
+    }
+  }
+}
+
 @keyframes wts-flash-pulse {
   0%,
   35% {
