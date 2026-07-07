@@ -8,6 +8,26 @@
   background: var(--surface);
   border-bottom: 1px solid var(--grid);
   padding: 0.55rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  .theme-toggle {
+    border: 1px solid var(--grid);
+    background: var(--surface);
+    color: var(--ink-2);
+    border-radius: 16px;
+    padding: 0.2rem 0.75rem;
+    font-size: 0.78rem;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      background: var(--accent-wash);
+      border-color: var(--accent-soft);
+    }
+  }
 
   .brand {
     display: inline-flex;

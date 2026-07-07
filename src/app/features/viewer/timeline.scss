@@ -125,8 +125,8 @@
 .tl-tooltip {
   position: absolute;
   transform: translate(-50%, calc(-100% - 12px));
-  background: var(--ink);
-  color: #fff;
+  background: var(--tt-bg);
+  color: var(--tt-fg);
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 0.75rem;
@@ -140,7 +140,7 @@
   }
 
   .tt-label {
-    color: #c3c2b7;
+    color: var(--tt-muted);
   }
 
   .tt-row {
@@ -151,7 +151,7 @@
   }
 
   .tt-who {
-    color: #c3c2b7;
+    color: var(--tt-muted);
     max-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;

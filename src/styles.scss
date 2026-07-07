@@ -17,15 +17,67 @@
   --accent-soft: #86b6ef;
   --accent-wash: #eaf2fc;
 
-  /* diff colors */
+  /* diff colors (interfaccia: legenda, chip) */
   --ins-bg: #d6f3d6;
   --ins-ink: #0a5c0a;
   --del-bg: #fbdede;
   --del-ink: #8c1d1d;
 
+  /* diff colors dentro la voce: SEMPRE i valori chiari.
+     In tema scuro la voce è resa con l'inversione intelligente,
+     quindi questi colori diventano automaticamente scuri. */
+  --paper-ins-bg: #d6f3d6;
+  --paper-ins-ink: #0a5c0a;
+  --paper-del-bg: #fbdede;
+  --paper-del-ink: #8c1d1d;
+
   /* deltas */
   --good: #006300;
   --bad: #c22f2f;
+
+  /* stati di errore */
+  --error-bg: #fdf0f0;
+  --error-border: #efc4c4;
+
+  /* tooltip del grafico */
+  --tt-bg: #0b0b0b;
+  --tt-fg: #ffffff;
+  --tt-muted: #c3c2b7;
+
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --surface: #1a1a19;
+  --page: #0d0d0d;
+  --ink: #ffffff;
+  --ink-2: #c3c2b7;
+  --ink-muted: #898781;
+  --grid: #2c2c2a;
+  --axis: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+
+  --accent: #3987e5;
+  --accent-deep: #6da7ec;
+  --accent-soft: #184f95;
+  --accent-wash: #16283f;
+
+  --ins-bg: #1d4423;
+  --ins-ink: #9be0a5;
+  --del-bg: #4d1a1c;
+  --del-ink: #f2a0a0;
+
+  --good: #0ca30c;
+  --bad: #e66767;
+
+  --error-bg: #3a1717;
+  --error-border: #5c2626;
+
+  --tt-bg: #f0efec;
+  --tt-fg: #0b0b0b;
+  --tt-muted: #52514e;
+
+  color-scheme: dark;
 }
 
 * {
@@ -63,6 +115,16 @@ button {
   line-height: 1.65;
   overflow-wrap: break-word;
 
+  /* Il pannello della voce è "carta": colori base SEMPRE chiari, espressi
+     come letterali (non variabili di tema). In tema scuro l'intero pannello
+     viene invertito, quindi partire dai colori chiari è ciò che rende il
+     risultato leggibile. */
+  color: #202122;
+
+  a {
+    color: #1c5cab;
+  }
+
   h1,
   h2,
   h3,
@@ -73,7 +135,7 @@ button {
   }
 
   h2 {
-    border-bottom: 1px solid var(--grid);
+    border-bottom: 1px solid #e1e0d9;
     padding-bottom: 0.2em;
   }
 
@@ -93,10 +155,10 @@ button {
   }
 
   blockquote {
-    border-left: 3px solid var(--grid);
+    border-left: 3px solid #e1e0d9;
     margin-left: 0;
     padding-left: 1em;
-    color: var(--ink-2);
+    color: #52514e;
   }
 
   /* fallback minimi se gli stili di Wikipedia non coprono */
@@ -124,10 +186,10 @@ button {
 
   figcaption {
     font-size: 0.85em;
-    color: var(--ink-2);
+    color: #52514e;
   }
 
-  /* ---- evidenziazione differenze ---- */
+  /* ---- evidenziazione differenze (colori "carta": vedi :root) ---- */
   ins,
   ins a,
   ins b,
@@ -138,12 +200,12 @@ button {
   ins th,
   ins p,
   ins div {
-    background-color: var(--ins-bg);
+    background-color: var(--paper-ins-bg);
     text-decoration: none;
   }
 
   ins {
-    box-shadow: 0 0 0 2px var(--ins-bg);
+    box-shadow: 0 0 0 2px var(--paper-ins-bg);
     border-radius: 2px;
   }
 
@@ -157,25 +219,74 @@ button {
   del th,
   del p,
   del div {
-    background-color: var(--del-bg);
-    color: var(--del-ink);
+    background-color: var(--paper-del-bg);
+    color: var(--paper-del-ink);
   }
 
   del {
     text-decoration: line-through;
     text-decoration-thickness: 1px;
-    box-shadow: 0 0 0 2px var(--del-bg);
+    box-shadow: 0 0 0 2px var(--paper-del-bg);
     border-radius: 2px;
   }
 
   ins img {
-    outline: 3px solid var(--ins-ink);
+    outline: 3px solid var(--paper-ins-ink);
     outline-offset: 1px;
   }
 
   del img {
-    outline: 3px solid var(--del-ink);
+    outline: 3px solid var(--paper-del-ink);
     outline-offset: 1px;
     opacity: 0.55;
   }
+
+  /* lampeggio sul blocco di modifica raggiunto col navigatore */
+  .wts-flash {
+    animation: wts-flash-pulse 1.4s ease-out;
+  }
+}
+
+@keyframes wts-flash-pulse {
+  0%,
+  35% {
+    outline: 3px solid #2a78d6;
+    outline-offset: 2px;
+  }
+
+  100% {
+    outline: 3px solid transparent;
+    outline-offset: 2px;
+  }
+}
+
+/* Tema scuro: la voce arriva da Wikipedia con stili pensati per fondo
+   chiaro → inversione intelligente (le immagini vengono re-invertite
+   e restano naturali). I colori del diff "carta" diventano scuri da soli. */
+:root[data-theme='dark'] .wts-article {
+  /* sfondo chiaro esplicito DENTRO il filtro: invertito diventa ~#171717,
+     quasi identico alla superficie scura circostante */
+  background: #fcfcfb;
+  filter: invert(0.92) hue-rotate(180deg);
+
+  img,
+  video {
+    filter: invert(1) hue-rotate(180deg);
+  }
+}
+
+/* tasti mostrati nei suggerimenti da tastiera */
+kbd {
+  display: inline-block;
+  min-width: 1.4em;
+  padding: 0 0.35em;
+  border: 1px solid var(--axis);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink-2);
+  font-family: inherit;
+  font-size: 0.9em;
+  line-height: 1.5;
+  text-align: center;
 }

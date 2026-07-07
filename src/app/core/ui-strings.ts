@@ -47,8 +47,23 @@ function buildStrings() {
     nextVersion: 'Versione successiva',
     lastVersion: 'Versione attuale',
     scrubber: 'Scorri le versioni',
-    kbdHint:
-      'Tastiera: ← → versione precedente/successiva · Home prima versione · End versione attuale',
+    kbdVersions: 'versione precedente / successiva',
+    kbdChanges: 'modifica precedente / successiva',
+    kbdFirstLast: 'prima / attuale',
+    kbdTop: 'inizio pagina',
+    backToTop: 'Torna a inizio pagina (T)',
+
+    // navigazione tra le modifiche nella pagina
+    changeLabel: 'modifica',
+    changeOf: 'di',
+    prevChange: 'Modifica precedente nella pagina (↑ oppure W)',
+    nextChange: 'Modifica successiva nella pagina (↓ oppure S)',
+
+    // tema
+    themeTitle: 'Cambia tema (auto → chiaro → scuro)',
+    themeAuto: 'Auto',
+    themeLight: 'Chiaro',
+    themeDark: 'Scuro',
 
     // scheda revisione
     version: 'Versione',

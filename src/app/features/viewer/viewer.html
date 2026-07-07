@@ -73,7 +73,15 @@
         ⇥
       </button>
     </nav>
-    <p class="kbd-hint">{{ t.kbdHint }}</p>
+    <p class="kbd-hint">
+      <kbd>←</kbd><kbd>A</kbd> / <kbd>→</kbd><kbd>D</kbd> {{ t.kbdVersions }}
+      <span class="dot" aria-hidden="true">·</span>
+      <kbd>↑</kbd><kbd>W</kbd> / <kbd>↓</kbd><kbd>S</kbd> {{ t.kbdChanges }}
+      <span class="dot" aria-hidden="true">·</span>
+      <kbd>Home</kbd> / <kbd>End</kbd> {{ t.kbdFirstLast }}
+      <span class="dot" aria-hidden="true">·</span>
+      <kbd>T</kbd> {{ t.kbdTop }}
+    </p>
 
     @if (current(); as rev) {
       <section class="rev-card">
@@ -137,6 +145,7 @@
       }
       @if (diffHtml(); as html) {
         <article
+          #articleEl
           class="wts-article"
           [class.dimmed]="diffLoading()"
           [innerHTML]="html"
@@ -144,6 +153,22 @@
         ></article>
       }
     </section>
+
+    <div class="float-stack">
+      @if (showTop()) {
+        <button class="top-btn" (click)="scrollToTop()" [title]="t.backToTop">⤒</button>
+      }
+      @if (changeGroups().length) {
+        <nav class="change-nav" [attr.aria-label]="t.changeLabel">
+          <button (click)="prevChange()" [title]="t.prevChange">▲</button>
+          <span class="cn-counter" [title]="t.changeLabel">
+            <strong>{{ currentChange() < 0 ? '–' : currentChange() + 1 }}</strong>
+            <span class="cn-total">{{ t.changeOf }} {{ changeGroups().length }}</span>
+          </span>
+          <button (click)="nextChange()" [title]="t.nextChange">▼</button>
+        </nav>
+      }
+    </div>
 
     <p class="attribution">
       {{ t.attributionPre }}

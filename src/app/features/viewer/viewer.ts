@@ -1,12 +1,15 @@
 import {
   Component,
+  ElementRef,
   HostListener,
   OnDestroy,
+  afterRenderEffect,
   computed,
   effect,
   inject,
   signal,
   untracked,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SafeHtml, Title } from '@angular/platform-browser';
@@ -15,6 +18,7 @@ import { DiffService } from '../../core/diff.service';
 import { uiStrings } from '../../core/ui-strings';
 import { RevisionMeta } from '../../core/models';
 import { WikipediaApiService } from '../../core/wikipedia-api.service';
+import { collectChangeGroups } from './change-groups';
 import { Timeline } from './timeline';
 
 const WIKI_CSS_ID = 'wts-wiki-css';
@@ -49,6 +53,15 @@ export class Viewer implements OnDestroy {
   diffHtml = signal<SafeHtml | null>(null);
   diffLoading = signal(false);
   diffError = signal<string | null>(null);
+
+  /** blocchi di modifica navigabili nella pagina corrente */
+  changeGroups = signal<HTMLElement[][]>([]);
+  /** posizione corrente nel navigatore delle modifiche (-1 = nessun salto ancora) */
+  currentChange = signal(-1);
+  /** mostra il pulsante "torna su" quando la pagina è scorsa in basso */
+  showTop = signal(false);
+
+  private articleRef = viewChild<ElementRef<HTMLElement>>('articleEl');
 
   private abort: AbortController | null = null;
   private diffSeq = 0;
@@ -128,6 +141,16 @@ export class Viewer implements OnDestroy {
     effect(() => {
       const title = this.normalizedTitle();
       if (title) this.titleSrv.setTitle(`${title} — ${this.t.appName}`);
+    });
+
+    // dopo ogni nuovo diff renderizzato, raccoglie i blocchi di modifica
+    afterRenderEffect(() => {
+      this.diffHtml();
+      const el = this.articleRef()?.nativeElement;
+      untracked(() => {
+        this.changeGroups.set(el ? collectChangeGroups(el) : []);
+        this.currentChange.set(-1);
+      });
     });
   }
 
@@ -292,6 +315,45 @@ export class Viewer implements OnDestroy {
     if (target != null) this.goTo(target);
   }
 
+  // ---------- navigazione tra le modifiche nella pagina ----------
+
+  nextChange(): void {
+    const groups = this.changeGroups();
+    if (!groups.length) return;
+    const i = this.currentChange();
+    this.jumpToChange(i < 0 ? 0 : Math.min(i + 1, groups.length - 1));
+  }
+
+  prevChange(): void {
+    const groups = this.changeGroups();
+    if (!groups.length) return;
+    const i = this.currentChange();
+    this.jumpToChange(i < 0 ? groups.length - 1 : Math.max(i - 1, 0));
+  }
+
+  private jumpToChange(i: number): void {
+    const group = this.changeGroups()[i];
+    if (!group) return;
+    this.currentChange.set(i);
+    group[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    for (const el of group) {
+      // riavvia l'animazione anche su salti ripetuti sullo stesso blocco
+      el.classList.remove('wts-flash');
+      void el.offsetWidth;
+      el.classList.add('wts-flash');
+      setTimeout(() => el.classList.remove('wts-flash'), 1500);
+    }
+  }
+
+  scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll(): void {
+    this.showTop.set(window.scrollY > 400);
+  }
+
   selectUser(user: string): void {
     if (this.userFilter() === user) return;
     this.userFilter.set(user);
@@ -311,10 +373,28 @@ export class Viewer implements OnDestroy {
     }
     switch (ev.key) {
       case 'ArrowLeft':
+      case 'a':
+      case 'A':
         this.step(-1);
         break;
       case 'ArrowRight':
+      case 'd':
+      case 'D':
         this.step(1);
+        break;
+      case 'ArrowUp':
+      case 'w':
+      case 'W':
+        this.prevChange();
+        break;
+      case 'ArrowDown':
+      case 's':
+      case 'S':
+        this.nextChange();
+        break;
+      case 't':
+      case 'T':
+        this.scrollToTop();
         break;
       case 'Home':
         if (this.historyLoading()) return;

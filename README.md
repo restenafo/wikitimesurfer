@@ -12,7 +12,13 @@ timeline delle modifiche per mese.
 
 - Ricerca di una voce in 14 edizioni linguistiche di Wikipedia (selettore in home).
 - Navigazione tra tutte le versioni: pulsanti ⇤ ← → ⇥, cursore, tastiera
-  (`←`/`→` versione precedente/successiva, `Home`/`End` prima/ultima).
+  (`←`/`→` o `A`/`D` versione precedente/successiva, `Home`/`End` prima/ultima).
+- Navigatore fluttuante delle modifiche dentro la pagina: salta al blocco di modifica
+  precedente/successivo (`↑`/`↓` o `W`/`S`) con contatore ed evidenziazione lampeggiante;
+  le modifiche contigue nello stesso paragrafo/cella sono raggruppate in un unico blocco.
+  Pulsante "torna su" (o tasto `T`) quando la pagina è scorsa in basso.
+- Tema chiaro/scuro/auto (selettore in alto, preferenza in localStorage); in tema scuro la
+  voce è resa con inversione intelligente dei colori (le immagini restano naturali).
 - Diff sul testo renderizzato: la voce appare formattata come su Wikipedia, con `<ins>`/`<del>`
   calcolati client-side ([node-htmldiff](https://www.npmjs.com/package/node-htmldiff)) tra la
   revisione corrente e la precedente, sanitizzati con DOMPurify.
@@ -24,7 +30,7 @@ timeline delle modifiche per mese.
 - Cronologia caricata progressivamente (500 revisioni per richiesta API, con pausa di
   cortesia); l'HTML delle revisioni adiacenti è precaricato per una navigazione fluida.
 - Pagina Privacy & Cookie (nessun banner necessario: niente cookie, solo `localStorage`
-  tecnico per l'edizione preferita).
+  tecnico per edizione preferita e tema).
 
 ## Sviluppo
 

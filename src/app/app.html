@@ -4,6 +4,9 @@
       <span class="brand-mark">⏳</span>
       <span class="brand-name">{{ t.appName }}</span>
     </a>
+    <button class="theme-toggle" (click)="theme.cycle()" [title]="t.themeTitle">
+      <span aria-hidden="true">{{ themeIcon() }}</span> {{ themeLabel() }}
+    </button>
   </header>
 
   <main class="main">
