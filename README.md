@@ -47,9 +47,10 @@ build automatica dal repository GitHub: build command `npm run build`, deploy co
 `npx wrangler deploy`, variabile `NODE_VERSION=22`. La configurazione è in `wrangler.jsonc`
 (assets con `not_found_handling: single-page-application` per il fallback delle rotte).
 
-Alternative: qualsiasi hosting statico servendo `dist/wikitimesurfer/browser` — su
-Netlify/Pages il fallback SPA è coperto dal file `public/_redirects` incluso nella build;
-su nginx: `try_files $uri $uri/ /index.html;`.
+Alternative: qualsiasi hosting statico servendo `dist/wikitimesurfer/browser` — serve solo
+il fallback SPA verso `index.html` (su Netlify/Pages: file `_redirects` con
+`/* /index.html 200`; su nginx: `try_files $uri $uri/ /index.html;`). Nota: su Workers il
+file `_redirects` con la regola catch-all non è ammesso, il fallback è in `wrangler.jsonc`.
 
 Per le statistiche di visita, se serviranno: Cloudflare Web Analytics o Plausible
 (cookieless, nessun banner di consenso richiesto).
