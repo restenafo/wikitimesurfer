@@ -1,0 +1,11 @@
+// Configurazione Cloudflare Workers: sito statico con fallback SPA.
+// Il deploy avviene dalla build Git di Cloudflare con `npx wrangler deploy`.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "wikitimesurfer",
+  "compatibility_date": "2026-07-01",
+  "assets": {
+    "directory": "./dist/wikitimesurfer/browser",
+    "not_found_handling": "single-page-application"
+  }
+}

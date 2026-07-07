@@ -3,7 +3,7 @@ import { RevisionMeta, WikiEdition } from './models';
 
 /** Header identificativo richiesto dall'etiquette delle API Wikimedia (supportato in CORS). */
 const API_HEADERS = {
-  'Api-User-Agent': 'WikiTimeSurfer/1.0 (https://wikitimesurfer.example; re.stefano@gmail.com)',
+  'Api-User-Agent': 'WikiTimeSurfer/1.0 (https://wikitimesurfer.com; re.stefano@gmail.com)',
 };
 
 const PARSE_CACHE_MAX = 40;

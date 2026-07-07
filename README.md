@@ -40,15 +40,16 @@ npm start          # http://localhost:4200
 npm run build      # produzione → dist/wikitimesurfer/browser
 ```
 
-## Deploy (hosting statico)
+## Deploy
 
-Il sito è statico: basta pubblicare `dist/wikitimesurfer/browser`. Il file `public/_redirects`
-(già incluso nella build) configura il fallback SPA su Cloudflare Pages e Netlify.
+Il sito è statico e pubblicato su **Cloudflare Workers** (https://wikitimesurfer.com) con
+build automatica dal repository GitHub: build command `npm run build`, deploy command
+`npx wrangler deploy`, variabile `NODE_VERSION=22`. La configurazione è in `wrangler.jsonc`
+(assets con `not_found_handling: single-page-application` per il fallback delle rotte).
 
-- **Cloudflare Pages** (consigliato, gratuito): build command `npm run build`, output
-  directory `dist/wikitimesurfer/browser`.
-- **Netlify**: stessa configurazione.
-- **Server proprio (nginx)**: servire la cartella con `try_files $uri $uri/ /index.html;`.
+Alternative: qualsiasi hosting statico servendo `dist/wikitimesurfer/browser` — su
+Netlify/Pages il fallback SPA è coperto dal file `public/_redirects` incluso nella build;
+su nginx: `try_files $uri $uri/ /index.html;`.
 
 Per le statistiche di visita, se serviranno: Cloudflare Web Analytics o Plausible
 (cookieless, nessun banner di consenso richiesto).
