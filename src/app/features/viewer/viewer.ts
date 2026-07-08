@@ -15,6 +15,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SafeHtml, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DiffService } from '../../core/diff.service';
+import { LanguageService } from '../../core/language.service';
 import { uiStrings } from '../../core/ui-strings';
 import { RevisionMeta } from '../../core/models';
 import { WikipediaApiService } from '../../core/wikipedia-api.service';
@@ -35,8 +36,9 @@ export class Viewer implements OnDestroy {
   private api = inject(WikipediaApiService);
   private diff = inject(DiffService);
   private titleSrv = inject(Title);
+  private language = inject(LanguageService);
 
-  readonly t = uiStrings();
+  readonly t = computed(() => uiStrings(this.language.current()));
 
   lang = signal('it');
   normalizedTitle = signal('');
@@ -68,7 +70,10 @@ export class Viewer implements OnDestroy {
   /** revisione richiesta via ?rev= non ancora presente nei batch caricati */
   private pendingRevId: number | null = null;
 
-  private dateFmt = new Intl.DateTimeFormat('it-IT', { dateStyle: 'long', timeStyle: 'short' });
+  private dateFmt = computed(
+    () =>
+      new Intl.DateTimeFormat(this.language.current(), { dateStyle: 'long', timeStyle: 'short' }),
+  );
 
   /** cronologia in ordine cronologico (indice 0 = prima versione) con delta byte */
   revisions = computed<RevisionMeta[]>(() => {
@@ -140,7 +145,7 @@ export class Viewer implements OnDestroy {
 
     effect(() => {
       const title = this.normalizedTitle();
-      if (title) this.titleSrv.setTitle(`${title} — ${this.t.appName}`);
+      if (title) this.titleSrv.setTitle(`${title} — ${this.t().appName}`);
     });
 
     // dopo ogni nuovo diff renderizzato, raccoglie i blocchi di modifica
@@ -219,7 +224,7 @@ export class Viewer implements OnDestroy {
       .catch((e: Error) => {
         if (ac.signal.aborted) return;
         this.historyLoading.set(false);
-        this.historyError.set(e.message === 'missing' ? this.t.notFound : this.t.historyError);
+        this.historyError.set(e.message === 'missing' ? this.t().notFound : this.t().historyError);
       });
   }
 
@@ -248,7 +253,7 @@ export class Viewer implements OnDestroy {
       this.diffHtml.set(this.diff.buildDiffView(beforeHtml, afterHtml, lang));
       this.prefetchNeighbours(lang);
     } catch {
-      if (seq === this.diffSeq) this.diffError.set(this.t.diffError);
+      if (seq === this.diffSeq) this.diffError.set(this.t().diffError);
     } finally {
       if (seq === this.diffSeq) this.diffLoading.set(false);
     }
@@ -423,17 +428,17 @@ export class Viewer implements OnDestroy {
   // ---------- helper di presentazione ----------
 
   formatDate(ts: string): string {
-    return this.dateFmt.format(new Date(ts));
+    return this.dateFmt().format(new Date(ts));
   }
 
   fmt(n: number): string {
-    return n.toLocaleString('it-IT');
+    return n.toLocaleString(this.language.current());
   }
 
   deltaLabel(rev: RevisionMeta): string {
     if (rev.delta == null) return '';
     const sign = rev.delta > 0 ? '+' : '';
-    return `${sign}${this.fmt(rev.delta)} ${this.t.bytes}`;
+    return `${sign}${this.fmt(rev.delta)} ${this.t().bytes}`;
   }
 
   articleUrl(): string {

@@ -2,11 +2,24 @@
   <header class="topbar">
     <a routerLink="/" class="brand">
       <span class="brand-mark">⏳</span>
-      <span class="brand-name">{{ t.appName }}</span>
+      <span class="brand-name">{{ t().appName }}</span>
     </a>
-    <button class="theme-toggle" (click)="theme.cycle()" [title]="t.themeTitle">
-      <span aria-hidden="true">{{ themeIcon() }}</span> {{ themeLabel() }}
-    </button>
+    <div class="topbar-actions">
+      <select
+        class="lang-select"
+        [value]="language.current()"
+        (change)="onUiLangChange($event)"
+        [title]="t().uiLangLabel"
+        [attr.aria-label]="t().uiLangLabel"
+      >
+        @for (l of uiLangs; track l.code) {
+          <option [value]="l.code">{{ l.label }}</option>
+        }
+      </select>
+      <button class="theme-toggle" (click)="theme.cycle()" [title]="t().themeTitle">
+        <span aria-hidden="true">{{ themeIcon() }}</span> {{ themeLabel() }}
+      </button>
+    </div>
   </header>
 
   <main class="main">
@@ -15,15 +28,17 @@
 
   <footer class="footer">
     <p>
-      {{ t.footerLicense }}
-      <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.it" target="_blank" rel="noopener">
+      {{ t().footerLicense }}
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">
         CC BY-SA 4.0</a
-      >. {{ t.footerDisclaimer }}
+      >. {{ t().footerDisclaimer }}
     </p>
     <nav>
-      <a routerLink="/privacy">{{ t.footerPrivacy }}</a>
+      <a routerLink="/privacy">{{ t().footerPrivacy }}</a>
       <span aria-hidden="true">·</span>
-      <a href="https://ko-fi.com/" target="_blank" rel="noopener">{{ t.footerSupport }} ♥</a>
+      <a href="https://ko-fi.com/wikitimesurfer" target="_blank" rel="noopener">
+        {{ t().footerSupport }} ♥
+      </a>
     </nav>
   </footer>
 </div>

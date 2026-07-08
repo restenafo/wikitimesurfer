@@ -1,11 +1,11 @@
 <div class="timeline" #wrapper>
   <div class="tl-head">
-    <span class="tl-title">{{ t.timelineTitle }}</span>
-    <span class="tl-total">{{ fmt(revisions().length) }} {{ t.timelineEdits }}</span>
+    <span class="tl-title">{{ t().timelineTitle }}</span>
+    <span class="tl-total">{{ fmt(revisions().length) }} {{ t().timelineEdits }}</span>
     @if (filterUser(); as f) {
       <span class="tl-legend">
-        <span class="swatch main"></span>{{ t.legendUser }} {{ f }}
-        <span class="swatch other"></span>{{ t.legendOthers }}
+        <span class="swatch main"></span>{{ t().legendUser }} {{ f }}
+        <span class="swatch other"></span>{{ t().legendOthers }}
       </span>
     }
   </div>
@@ -84,7 +84,7 @@
   @if (hover(); as hv) {
     <div class="tl-tooltip" [style.left.px]="hv.x" [style.top.px]="hv.y">
       <div class="tt-value">
-        {{ fmt(hv.b.count) }} {{ hv.b.count === 1 ? t.timelineEditsOne : t.timelineEdits }}
+        {{ fmt(hv.b.count) }} {{ hv.b.count === 1 ? t().timelineEditsOne : t().timelineEdits }}
       </div>
       <div class="tt-label">{{ hv.b.label }}</div>
       @if (filterUser(); as f) {
@@ -94,7 +94,7 @@
         </div>
         <div class="tt-row">
           <span class="key other"></span><strong>{{ fmt(hv.b.count - hv.b.userCount) }}</strong>
-          <span class="tt-who">{{ t.legendOthers }}</span>
+          <span class="tt-who">{{ t().legendOthers }}</span>
         </div>
       }
     </div>

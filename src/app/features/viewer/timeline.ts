@@ -3,11 +3,13 @@ import {
   ElementRef,
   computed,
   effect,
+  inject,
   input,
   output,
   signal,
   viewChild,
 } from '@angular/core';
+import { LanguageService } from '../../core/language.service';
 import { uiStrings } from '../../core/ui-strings';
 import { RevisionMeta } from '../../core/models';
 
@@ -43,7 +45,9 @@ export class Timeline {
   filterUser = input<string | null>(null);
   jumpTo = output<number>();
 
-  readonly t = uiStrings();
+  private language = inject(LanguageService);
+
+  readonly t = computed(() => uiStrings(this.language.current()));
 
   // geometria (px)
   readonly PITCH = 10;
@@ -58,11 +62,14 @@ export class Timeline {
   private wrapper = viewChild<ElementRef<HTMLDivElement>>('wrapper');
   private scroller = viewChild<ElementRef<HTMLDivElement>>('scroller');
 
-  private monthFmt = new Intl.DateTimeFormat('it-IT', { month: 'long', year: 'numeric' });
+  private monthFmt = computed(
+    () => new Intl.DateTimeFormat(this.language.current(), { month: 'long', year: 'numeric' }),
+  );
 
   buckets = computed<MonthBucket[]>(() => {
     const revs = this.revisions();
     const f = this.filterUser();
+    const monthFmt = this.monthFmt();
     if (!revs.length) return [];
     const out: MonthBucket[] = [];
     const map = new Map<string, MonthBucket>();
@@ -76,7 +83,7 @@ export class Timeline {
       const b: MonthBucket = {
         year: y,
         month: m,
-        label: this.monthFmt.format(new Date(Date.UTC(y, m, 1))),
+        label: monthFmt.format(new Date(Date.UTC(y, m, 1))),
         x: out.length * this.PITCH + 1,
         count: 0,
         userCount: 0,
@@ -114,7 +121,7 @@ export class Timeline {
 
   midLabel = computed<string | null>(() => {
     const half = this.niceMax() / 2;
-    return Number.isInteger(half) ? half.toLocaleString('it-IT') : null;
+    return Number.isInteger(half) ? half.toLocaleString(this.language.current()) : null;
   });
 
   width = computed(() => this.buckets().length * this.PITCH + 2);
@@ -169,8 +176,7 @@ export class Timeline {
   });
 
   ariaLabel = computed(
-    () =>
-      `${this.t.timelineTitle}: ${this.revisions().length.toLocaleString('it-IT')} ${this.t.timelineEdits}`,
+    () => `${this.t().timelineTitle}: ${this.fmt(this.revisions().length)} ${this.t().timelineEdits}`,
   );
 
   constructor() {
@@ -186,7 +192,7 @@ export class Timeline {
   }
 
   fmt(n: number): string {
-    return n.toLocaleString('it-IT');
+    return n.toLocaleString(this.language.current());
   }
 
   onHover(b: MonthBucket, ev: PointerEvent): void {

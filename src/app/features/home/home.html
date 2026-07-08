@@ -1,13 +1,13 @@
 <div class="home">
   <section class="hero">
-    <h1>{{ t.appName }}</h1>
-    <p class="tagline">{{ t.tagline }}</p>
-    <p class="lead">{{ t.heroLead }}</p>
+    <h1>{{ t().appName }}</h1>
+    <p class="tagline">{{ t().tagline }}</p>
+    <p class="lead">{{ t().heroLead }}</p>
   </section>
 
   <section class="search-card">
     <label class="lang-label">
-      {{ t.wikiLabel }}
+      {{ t().wikiLabel }}
       <select [value]="lang()" (change)="onLangChange($event)">
         @for (e of editions; track e.code) {
           <option [value]="e.code">{{ e.label }} ({{ e.code }}.wikipedia.org)</option>
@@ -21,11 +21,11 @@
         [value]="query()"
         (input)="onQuery($event)"
         (keydown.enter)="submit()"
-        [placeholder]="t.searchPlaceholder"
+        [placeholder]="t().searchPlaceholder"
         autocomplete="off"
         autofocus
       />
-      <button class="go" (click)="submit()">{{ t.searchButton }}</button>
+      <button class="go" (click)="submit()">{{ t().searchButton }}</button>
     </div>
 
     @if (suggestions().length) {
@@ -37,7 +37,7 @@
     }
 
     <p class="examples">
-      {{ t.examplesLabel }}
+      {{ t().examplesLabel }}
       @for (ex of examples(); track ex) {
         <button class="chip" (click)="go(ex)">{{ ex }}</button>
       }
@@ -45,11 +45,11 @@
   </section>
 
   <section class="how">
-    <h2>{{ t.howTitle }}</h2>
+    <h2>{{ t().howTitle }}</h2>
     <ol>
-      <li>{{ t.how1 }}</li>
-      <li>{{ t.how2 }}</li>
-      <li>{{ t.how3 }}</li>
+      <li>{{ t().how1 }}</li>
+      <li>{{ t().how2 }}</li>
+      <li>{{ t().how3 }}</li>
     </ol>
   </section>
 </div>

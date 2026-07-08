@@ -1,5 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { LanguageService } from '../../core/language.service';
 import { uiStrings } from '../../core/ui-strings';
 import { WikipediaApiService } from '../../core/wikipedia-api.service';
 
@@ -21,16 +23,30 @@ const EXAMPLES: Record<string, string[]> = {
 export class Home {
   private api = inject(WikipediaApiService);
   private router = inject(Router);
+  private titleSrv = inject(Title);
+  private language = inject(LanguageService);
 
-  readonly t = uiStrings();
+  readonly t = computed(() => uiStrings(this.language.current()));
   readonly editions = this.api.editions;
 
-  lang = signal(localStorage.getItem(LANG_KEY) ?? 'it');
+  lang = signal(this.defaultEdition());
   query = signal('');
   suggestions = signal<string[]>([]);
 
   private debounce?: ReturnType<typeof setTimeout>;
   private searchAbort?: AbortController;
+
+  constructor() {
+    effect(() => this.titleSrv.setTitle(`${this.t().appName} — ${this.t().tagline}`));
+  }
+
+  /** edizione preferita salvata, altrimenti quella della lingua dell'interfaccia */
+  private defaultEdition(): string {
+    const stored = localStorage.getItem(LANG_KEY);
+    if (stored && this.editions.some((e) => e.code === stored)) return stored;
+    const ui = this.language.current();
+    return this.editions.some((e) => e.code === ui) ? ui : 'en';
+  }
 
   examples(): string[] {
     return EXAMPLES[this.lang()] ?? EXAMPLES['en'];

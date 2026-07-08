@@ -10,7 +10,12 @@ timeline delle modifiche per mese.
 
 ## Funzionalità
 
-- Ricerca di una voce in 14 edizioni linguistiche di Wikipedia (selettore in home).
+- Interfaccia in 5 lingue (it, en, de, fr, es) con rilevamento automatico dalla lingua del
+  browser e fallback inglese; selettore in alto, preferenza in localStorage. Le stringhe sono
+  centralizzate per lingua in `src/app/core/ui-strings.ts` (il type-checker garantisce la
+  parità delle chiavi tra le lingue).
+- Ricerca di una voce in 14 edizioni linguistiche di Wikipedia (selettore in home,
+  predefinita = lingua dell'interfaccia).
 - Navigazione tra tutte le versioni: pulsanti ⇤ ← → ⇥, cursore, tastiera
   (`←`/`→` o `A`/`D` versione precedente/successiva, `Home`/`End` prima/ultima).
 - Navigatore fluttuante delle modifiche dentro la pagina: salta al blocco di modifica

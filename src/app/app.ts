@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { LanguageService, UiLang } from './core/language.service';
 import { ThemeService } from './core/theme.service';
 import { uiStrings } from './core/ui-strings';
 
@@ -10,8 +11,22 @@ import { uiStrings } from './core/ui-strings';
   styleUrl: './app.scss',
 })
 export class App {
-  readonly t = uiStrings();
   readonly theme = inject(ThemeService);
+  readonly language = inject(LanguageService);
+
+  readonly t = computed(() => uiStrings(this.language.current()));
+
+  readonly uiLangs: { code: UiLang; label: string }[] = [
+    { code: 'it', label: 'Italiano' },
+    { code: 'en', label: 'English' },
+    { code: 'de', label: 'Deutsch' },
+    { code: 'fr', label: 'Français' },
+    { code: 'es', label: 'Español' },
+  ];
+
+  onUiLangChange(ev: Event): void {
+    this.language.set((ev.target as HTMLSelectElement).value as UiLang);
+  }
 
   themeIcon(): string {
     switch (this.theme.mode()) {
@@ -27,11 +42,11 @@ export class App {
   themeLabel(): string {
     switch (this.theme.mode()) {
       case 'light':
-        return this.t.themeLight;
+        return this.t().themeLight;
       case 'dark':
-        return this.t.themeDark;
+        return this.t().themeDark;
       default:
-        return this.t.themeAuto;
+        return this.t().themeAuto;
     }
   }
 }

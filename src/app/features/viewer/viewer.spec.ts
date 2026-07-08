@@ -70,6 +70,8 @@ class ApiStub {
 
 describe('Viewer', () => {
   beforeEach(async () => {
+    // le asserzioni verificano i testi italiani: fissa la lingua della UI
+    localStorage.setItem('wts.uilang', 'it');
     await TestBed.configureTestingModule({
       imports: [Viewer],
       providers: [
