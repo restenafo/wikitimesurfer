@@ -134,6 +134,10 @@
       </div>
     }
 
+    @if (isDisambiguation()) {
+      <div class="disambig-note">🔀 {{ t().disambigNote }}</div>
+    }
+
     <section class="article-wrap">
       @if (diffLoading()) {
         <div class="article-loading" role="status">

@@ -48,6 +48,7 @@ export class Viewer implements OnDestroy {
   historyLoading = signal(true);
   historyError = signal<string | null>(null);
   totalCount = signal<number | null>(null);
+  isDisambiguation = signal(false);
 
   currentRevId = signal<number | null>(null);
   userFilter = signal<string | null>(null);
@@ -171,8 +172,10 @@ export class Viewer implements OnDestroy {
     const ac = new AbortController();
     this.abort = ac;
 
+    window.scrollTo({ top: 0 });
     this.lang.set(lang);
     this.normalizedTitle.set(title);
+    this.isDisambiguation.set(false);
     this.revsDesc.set([]);
     this.historyLoading.set(true);
     this.historyError.set(null);
@@ -210,9 +213,10 @@ export class Viewer implements OnDestroy {
         },
         ac.signal,
       )
-      .then(({ normalizedTitle }) => {
+      .then(({ normalizedTitle, disambiguation }) => {
         if (ac.signal.aborted) return;
         this.normalizedTitle.set(normalizedTitle);
+        this.isDisambiguation.set(disambiguation);
         this.historyLoading.set(false);
         // ?rev= inesistente: torna alla versione attuale
         if (this.pendingRevId != null || this.currentIndex() < 0) {
@@ -414,15 +418,37 @@ export class Viewer implements OnDestroy {
     ev.preventDefault();
   }
 
-  /** ancore interne (note a piè di pagina): scroll locale invece di navigazione */
+  /**
+   * Click dentro la voce:
+   * - ancore interne (note): scroll locale;
+   * - link ad altre voci dello stesso wiki: naviga alla loro cronologia
+   *   dentro WikiTimeSurfer (Ctrl/Cmd/Shift+click apre Wikipedia come prima);
+   * - immagini e link esterni: comportamento normale (Wikipedia in nuova scheda).
+   */
   onArticleClick(ev: MouseEvent): void {
     const a = (ev.target as HTMLElement).closest('a');
     if (!a) return;
     const href = a.getAttribute('href') ?? '';
-    if (!href.startsWith('#')) return;
+
+    if (href.startsWith('#')) {
+      ev.preventDefault();
+      const id = decodeURIComponent(href.slice(1));
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    if (ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.altKey) return;
+    if (a.querySelector('img')) return; // click su immagini: lascia aprire il file su Wikipedia
+
+    const wikiBase = `https://${this.lang()}.wikipedia.org/wiki/`;
+    if (!href.startsWith(wikiBase)) return;
+    const title = decodeURIComponent(href.slice(wikiBase.length).split('#')[0]).replace(
+      /_/g,
+      ' ',
+    );
+    if (!title) return;
     ev.preventDefault();
-    const id = decodeURIComponent(href.slice(1));
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.router.navigate(['/', this.lang(), title]);
   }
 
   // ---------- helper di presentazione ----------

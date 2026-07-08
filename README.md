@@ -31,6 +31,9 @@ timeline delle modifiche per mese.
   alla revisione immediatamente precedente nella cronologia completa).
 - Timeline scorribile con istogramma delle modifiche per mese; in modalità filtro le barre
   distinguono le modifiche dell'utente dalle altre.
+- I link interni della voce navigano dentro WikiTimeSurfer (clic → cronologia di quella voce;
+  Ctrl/Cmd+clic → apre Wikipedia); le pagine di disambiguazione sono riconosciute e mostrano
+  un avviso che invita a scegliere una voce.
 - Link condivisibili: la revisione corrente è nella URL (`?rev=<id>`).
 - Cronologia caricata progressivamente (500 revisioni per richiesta API, con pausa di
   cortesia); l'HTML delle revisioni adiacenti è precaricato per una navigazione fluida.

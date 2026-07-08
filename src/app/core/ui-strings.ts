@@ -86,6 +86,8 @@ function buildIt() {
       'Questa è la prima versione della voce: non c’è una versione precedente con cui confrontarla.',
     legendAdded: 'testo aggiunto',
     legendRemoved: 'testo rimosso',
+    disambigNote:
+      'Questa è una pagina di disambiguazione: clicca una delle voci nel testo per esplorarne la cronologia.',
 
     // timeline
     timelineTitle: 'Modifiche per mese',
@@ -175,6 +177,8 @@ function buildEn(): UiStrings {
       'This is the first version of the article: there is no previous version to compare it with.',
     legendAdded: 'added text',
     legendRemoved: 'removed text',
+    disambigNote:
+      'This is a disambiguation page: click one of the entries in the text to explore its history.',
 
     timelineTitle: 'Edits per month',
     timelineEdits: 'edits',
@@ -260,6 +264,8 @@ function buildDe(): UiStrings {
       'Dies ist die erste Version des Artikels: Es gibt keine frühere Version zum Vergleichen.',
     legendAdded: 'hinzugefügter Text',
     legendRemoved: 'entfernter Text',
+    disambigNote:
+      'Dies ist eine Begriffsklärungsseite: Klicke im Text auf einen Eintrag, um seine Versionsgeschichte zu erkunden.',
 
     timelineTitle: 'Änderungen pro Monat',
     timelineEdits: 'Änderungen',
@@ -345,6 +351,8 @@ function buildFr(): UiStrings {
       'Ceci est la première version de l’article : il n’y a pas de version précédente à comparer.',
     legendAdded: 'texte ajouté',
     legendRemoved: 'texte supprimé',
+    disambigNote:
+      'Ceci est une page d’homonymie : cliquez sur une entrée du texte pour explorer son historique.',
 
     timelineTitle: 'Modifications par mois',
     timelineEdits: 'modifications',
@@ -431,6 +439,8 @@ function buildEs(): UiStrings {
       'Esta es la primera versión del artículo: no hay una versión anterior con la que compararla.',
     legendAdded: 'texto añadido',
     legendRemoved: 'texto eliminado',
+    disambigNote:
+      'Esta es una página de desambiguación: haz clic en una de las entradas del texto para explorar su historial.',
 
     timelineTitle: 'Ediciones por mes',
     timelineEdits: 'ediciones',

@@ -87,13 +87,15 @@ export class WikipediaApiService {
     title: string,
     onBatch: (batch: RevisionMeta[]) => void,
     signal: AbortSignal,
-  ): Promise<{ normalizedTitle: string }> {
+  ): Promise<{ normalizedTitle: string; disambiguation: boolean }> {
     let cont: string | undefined;
     let normalized = title;
+    let disambiguation = false;
     do {
       const params: Record<string, string> = {
         action: 'query',
-        prop: 'revisions',
+        prop: 'revisions|pageprops',
+        ppprop: 'disambiguation',
         titles: title,
         redirects: '1',
         rvprop: 'ids|timestamp|user|comment|size|flags',
@@ -105,6 +107,7 @@ export class WikipediaApiService {
       const page = data.query?.pages?.[0];
       if (!page || page.missing) throw new Error('missing');
       normalized = page.title ?? normalized;
+      if (page.pageprops && 'disambiguation' in page.pageprops) disambiguation = true;
       const revs: RevisionMeta[] = (page.revisions ?? []).map((r: any) => ({
         revid: r.revid,
         parentid: r.parentid ?? 0,
@@ -123,7 +126,7 @@ export class WikipediaApiService {
       // piccola pausa di cortesia tra le richieste paginated
       if (cont) await new Promise((r) => setTimeout(r, 120));
     } while (cont && !signal.aborted);
-    return { normalizedTitle: normalized };
+    return { normalizedTitle: normalized, disambiguation };
   }
 
   /** HTML renderizzato di una revisione (con cache LRU). */

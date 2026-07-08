@@ -48,6 +48,7 @@ const REVS_DESC: RevisionMeta[] = [
 
 class ApiStub {
   editions = [{ code: 'it', label: 'Italiano' }];
+  disambiguation = false;
   async getEditCount(): Promise<number | null> {
     return 3;
   }
@@ -55,9 +56,9 @@ class ApiStub {
     _lang: string,
     title: string,
     onBatch: (b: RevisionMeta[]) => void,
-  ): Promise<{ normalizedTitle: string }> {
+  ): Promise<{ normalizedTitle: string; disambiguation: boolean }> {
     onBatch(REVS_DESC);
-    return { normalizedTitle: title };
+    return { normalizedTitle: title, disambiguation: this.disambiguation };
   }
   async getRevisionHtml(_lang: string, revid: number): Promise<string> {
     return `<div class="mw-parser-output"><p>contenuto della revisione ${revid}</p></div>`;
@@ -108,6 +109,12 @@ describe('Viewer', () => {
     expect(viewer.current()?.delta).toBe(100); // 200 - 100
     const el = h.fixture.nativeElement as HTMLElement;
     expect(el.textContent).toContain('modifica minore');
+  });
+
+  it('shows the disambiguation note when the page is a disambiguation', async () => {
+    (TestBed.inject(WikipediaApiService) as unknown as ApiStub).disambiguation = true;
+    const { h } = await create();
+    expect((h.fixture.nativeElement as HTMLElement).textContent).toContain('disambiguazione');
   });
 
   it('filters navigation by user', async () => {
